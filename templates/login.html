@@ -23,7 +23,8 @@
 
         <div class="lbld">
             <div class="lbltxt">Username</div>
-            <input type="text" id="username" placeholder="Enter your username">
+            <input required type="text" id="username" placeholder="Enter your username">
+            <div class="inpinf"></div>
         </div>
         <button onclick="verifyFace()">Log in</button>
     </div>
@@ -50,6 +51,12 @@
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             const image = canvas.toDataURL('image/jpeg');
             const username = usernameInput.value;
+
+            const usnmInp = document.getElementById("username")
+            if (usnmInp.value.trim() === '') {
+                usnmInp.parentNode.querySelector('.inpinf').textContent = 'Username is required.';
+                return;
+            }
 
             fetch('/login', {
                 method: 'POST',

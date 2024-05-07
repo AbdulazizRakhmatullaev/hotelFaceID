@@ -23,15 +23,18 @@
                 <div class="lbltxt">Username</div>
                 <input required type="text" name="username" id="username" placeholder="Username">
                 <div id="inpTxt"></div>
+                <div class="inpinf"></div>
             </div>
             <div class="fll">
                 <div class="lbld">
                     <div class="lbltxt">Check in</div>
                     <input required type="date" name="check_in" id="check_in">
+                    <div class="inpinf"></div>
                 </div>
                 <div class="lbld">
                     <div class="lbltxt">Checkout</div>
                     <input required type="date" name="check_out" id="check_out">
+                    <div class="inpinf"></div>
                 </div>
             </div>
             <button type="submit" onclick="RegisterNewUser()">Register</button>
@@ -57,7 +60,6 @@
 
             // Capture image from camera when submitting the form
             function RegisterNewUser() {
-
                 const canvas = document.createElement('canvas');
                 canvas.width = video.videoWidth;
                 canvas.height = video.videoHeight;
@@ -68,6 +70,24 @@
                 const username = usernameInput.value;
                 const check_in = check_inInput.value;
                 const check_out = check_outInput.value;
+
+                const usnmInp = document.getElementById("username")
+                if (usnmInp.value.trim() === '') {
+                    usnmInp.parentNode.querySelector('.inpinf').textContent = 'Username is required.';
+                    return;
+                }
+
+                const checkin = document.getElementById("check_in")
+                if (checkin.value.trim() === '') {
+                    checkin.parentNode.querySelector('.inpinf').textContent = 'Check in is required.';
+                    return;
+                }
+
+                const checkout = document.getElementById("check_out")
+                if (checkout.value.trim() === '') {
+                    checkout.parentNode.querySelector('.inpinf').textContent = 'Checkout is required.';
+                    return;
+                }
 
                 fetch('/register', {
                     method: 'POST',
