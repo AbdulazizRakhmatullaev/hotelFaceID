@@ -1,17 +1,21 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-import cv2
-import base64
+import cv2, base64, os, secrets
 import numpy as np
-import secrets
 from deepface import DeepFace
 from datetime import datetime
+
+# https://github.com/serengil/deepface_models/releases/download/v1.0/gender_model_weights.h5
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 
+# Get the current directory path
+current_directory = os.path.dirname(os.path.abspath(__file__))
+
 # Configure SQLite database
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///userfaceid.db"
+db_file_path = os.path.join(current_directory, "users.db")
+app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_file_path}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
@@ -20,6 +24,7 @@ db = SQLAlchemy(app)
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), nullable=False)
+    gender = db.Column(db.String(6), nullable=True)
     check_in = db.Column(db.DateTime, default=datetime.now)
     check_out = db.Column(db.DateTime, default=datetime.now)
     image = db.Column(db.Text, nullable=False)
@@ -33,8 +38,8 @@ cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 
 def check_face(image_data, username):
-    user = User.query.filter_by(username=username).first()
-    if user:
+    try:
+        user = User.query.filter_by(username=username).first()
         reference_img = user.image
         decoded_data = base64.b64decode(image_data.split(",")[1])
         nparr = np.frombuffer(decoded_data, np.uint8)
@@ -43,21 +48,25 @@ def check_face(image_data, username):
         nparr_ref = np.frombuffer(reference_img, np.uint8)
         ref_frame = cv2.imdecode(nparr_ref, cv2.IMREAD_COLOR)
 
-        print("Captured Frame Shape:", frame.shape)
-        print("Reference Frame Shape:", ref_frame.shape)
-
         # Ensure both frames are in RGB format
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         ref_frame = cv2.cvtColor(ref_frame, cv2.COLOR_BGR2RGB)
 
-        print("Captured Frame Shape:", frame.shape)
-        print("Reference Frame Shape:", ref_frame.shape)
+        if user.gender == None:
+            gen_inf = DeepFace.analyze(frame, actions=["gender"])
+            if isinstance(gen_inf, list):
+                gen_inf = gen_inf[0]
 
-        verification_result = DeepFace.verify(frame, ref_frame)
-        print(verification_result)
-        return verification_result["verified"]
-    else:
-        print("No users found in the database.")
+            gender = gen_inf.get("dominant_gender")
+
+            user.gender = gender
+            db.session.commit()
+        else:
+            user.gender = user.gender
+
+        return DeepFace.verify(frame, ref_frame)["verified"]
+    except ValueError as e:
+        print("Face could not be detected:", e)
         return False
 
 
@@ -68,6 +77,7 @@ def index():
         return render_template(
             "index.html",
             username=user.username,
+            gender=user.gender,
             check_in=user.check_in,
             check_out=user.check_out,
         )
@@ -81,12 +91,15 @@ def login():
         image_data = request.form["image"]
         username = request.form["username"]
 
-        if check_face(image_data, username):
-            user = User.query.filter_by(username=username).first()
-            session["user_id"] = user.id  # dummy user
-            return jsonify({"is_match": True})
+        user = User.query.filter_by(username=username).first()
+        if user:
+            if check_face(image_data, username):
+                session["user_id"] = user.id
+                return jsonify({"is_match": True})
+            else:
+                return jsonify({"is_match": False})
         else:
-            return jsonify({"is_match": False})
+            return jsonify({"user_not_found": True})
     else:
         if "user_id" in session:
             print("User already logged in. Redirecting to index.")

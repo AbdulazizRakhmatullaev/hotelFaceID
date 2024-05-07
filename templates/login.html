@@ -18,8 +18,8 @@
         <div id="camera">
             <div class="camtxt">Please look straight to the camera</div>
             <video id="video" autoplay></video>
+            <div id="result"></div>
         </div>
-        <div id="result"></div>
 
         <div class="lbld">
             <div class="lbltxt">Username</div>
@@ -67,11 +67,18 @@
             })
                 .then(response => response.json())
                 .then(data => {
+                    if (data.user_not_found) {
+                        resultDiv.style = "background: rgba(0, 0, 0, 0.5);";
+                        resultDiv.textContent = 'User does not exist!';
+                        return;
+                    }
+
                     if (data.is_match) {
                         resultDiv.textContent = 'Match!';
                         window.location.replace("/"); // Redirect to index page upon match
                     } else {
-                        resultDiv.textContent = 'No Match!';
+                        resultDiv.style = "background: rgba(0, 0, 0, 0.5);";
+                        resultDiv.textContent = 'Face is not matching!';
                     }
                 })
                 .catch(err => {

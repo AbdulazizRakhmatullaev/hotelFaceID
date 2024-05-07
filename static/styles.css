@@ -42,10 +42,11 @@ h1 {
 }
 
 video {
-    height: 370px;
+    height: 100%;
     width: 100%;
     box-sizing: border-box;
     overflow: hidden;
+    object-fit: cover;
 }
 
 input {
@@ -94,14 +95,19 @@ button:hover {
 }
 
 #result {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-transform: uppercase;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    color: #fff;
     font-weight: 600;
-    background: #ededed;
-    padding: 5px;
-    border-radius: 20px;
+    font-size: 11px;
+    padding: 1px 8px;
+    border-radius: 5px;
+}
+
+.usnm {
+    margin-left: 5px;
+    text-transform: capitalize;
 }
 
 .h-tt {
@@ -138,10 +144,11 @@ button:hover {
 .camtxt {
     position: absolute;
     top: 10px;
-    left: 10px;
-    color: red;
+    right: 10px;
+    color: #fff;
     font-weight: 600;
-    padding: 0 5px;
-    text-transform: uppercase;
-    background: black;
+    font-size: 11px;
+    padding: 1px 8px;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.5);
 }
