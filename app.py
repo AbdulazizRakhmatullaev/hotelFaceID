@@ -52,18 +52,6 @@ def check_face(image_data, username):
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         ref_frame = cv2.cvtColor(ref_frame, cv2.COLOR_BGR2RGB)
 
-        if user.gender == None:
-            gen_inf = DeepFace.analyze(frame, actions=["gender"])
-            if isinstance(gen_inf, list):
-                gen_inf = gen_inf[0]
-
-            gender = gen_inf.get("dominant_gender")
-
-            user.gender = gender
-            db.session.commit()
-        else:
-            user.gender = user.gender
-
         return DeepFace.verify(frame, ref_frame)["verified"]
     except ValueError as e:
         print("Face could not be detected:", e)
@@ -128,12 +116,31 @@ def register():
                 check_in=check_in,
                 check_out=check_out,
             )
+
             db.session.add(new_user)
             db.session.commit()
 
-            # Save image data to a file for inspection
-            with open("registered_image.jpg", "wb") as f:
-                f.write(base64.b64decode(image_data.split(",")[1]))
+            reference_img = new_user.image
+            decoded_data = base64.b64decode(image_data.split(",")[1])
+            nparr = np.frombuffer(decoded_data, np.uint8)
+            frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+            reference_img = base64.b64decode(reference_img.split(",")[1])
+            nparr_ref = np.frombuffer(reference_img, np.uint8)
+            ref_frame = cv2.imdecode(nparr_ref, cv2.IMREAD_COLOR)
+
+            # Ensure both frames are in RGB format
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            ref_frame = cv2.cvtColor(ref_frame, cv2.COLOR_BGR2RGB)
+
+            gen_inf = DeepFace.analyze(frame, actions=["gender"])
+            if isinstance(gen_inf, list):
+                gen_inf = gen_inf[0]
+
+            gender = gen_inf.get("dominant_gender")
+
+            new_user.gender = gender
+            db.session.commit()
+
 
             return jsonify({"is_available": True})
 

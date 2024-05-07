@@ -1,6 +1,11 @@
 /* styles.css */
 
+html, body {
+    height: 100%;
+}
+
 body {
+    margin: 0;
     font-size: 14px;
     font-weight: 400;
     font-style: normal;
@@ -151,4 +156,36 @@ button:hover {
     padding: 1px 8px;
     border-radius: 5px;
     background: rgba(0, 0, 0, 0.5);
+}
+
+/* Loader animation */
+.loader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
 }

@@ -10,6 +10,10 @@
 
 <body>
 
+    <div id="loadingOverlay" class="overlay">
+        <div class="loader"></div>
+    </div>
+
     <div class="coll">
         <h3>Login with FaceID</h3>
 
@@ -30,6 +34,7 @@
     </div>
 
     <script>
+        const loadingOverlay = document.getElementById("loadingOverlay");
         const video = document.getElementById('video');
         const resultDiv = document.getElementById('result');
         const usernameInput = document.getElementById('username');
@@ -44,6 +49,9 @@
             .catch(err => console.error(err));
 
         function verifyFace() {
+
+            loadingOverlay.style.display = "flex";
+
             const canvas = document.createElement('canvas');
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
@@ -55,6 +63,7 @@
             const usnmInp = document.getElementById("username")
             if (usnmInp.value.trim() === '') {
                 usnmInp.parentNode.querySelector('.inpinf').textContent = 'Username is required.';
+                hideLoadingOverlay();
                 return;
             }
 
@@ -70,6 +79,7 @@
                     if (data.user_not_found) {
                         resultDiv.style = "background: rgba(0, 0, 0, 0.5);";
                         resultDiv.textContent = 'User does not exist!';
+                        hideLoadingOverlay();
                         return;
                     }
 
@@ -83,7 +93,15 @@
                 })
                 .catch(err => {
                     console.error(err);
+                })
+                .finally(() => {
+                    hideLoadingOverlay();
                 });
+        }
+
+        function hideLoadingOverlay() {
+            // Hide loading overlay
+            loadingOverlay.style.display = "none";
         }
     </script>
 </body>
