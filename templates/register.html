@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Register</title>
+</head>
+
+<body>
+    <div class="coll">
+        <h3>Creating new account</h3>
+        <a href="/login">Log in, if you already have an account</a>
+
+        <div id="camera">
+            <div class="camtxt">Please look straight to the camera</div>
+            <video id="video" autoplay></video>
+        </div>
+        <div class="form">
+            <input type="hidden" name="image" id="image">
+            <div class="lbld">
+                <div class="lbltxt">Username</div>
+                <input required type="text" name="username" id="username" placeholder="Username">
+                <div id="inpTxt"></div>
+            </div>
+            <div class="fll">
+                <div class="lbld">
+                    <div class="lbltxt">Check in</div>
+                    <input required type="date" name="check_in" id="check_in">
+                </div>
+                <div class="lbld">
+                    <div class="lbltxt">Checkout</div>
+                    <input required type="date" name="check_out" id="check_out">
+                </div>
+            </div>
+            <button type="submit" onclick="RegisterNewUser()">Register</button>
+            </в>
+        </div>
+
+        <script>
+            const resultDiv = document.getElementById("inpTxt")
+            const video = document.getElementById('video');
+            const imageInput = document.getElementById('image');
+            const usernameInput = document.getElementById('username');
+            const check_inInput = document.getElementById('check_in');
+            const check_outInput = document.getElementById('check_out');
+
+            // Access the device camera and stream to video element
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then((stream) => {
+                    video.srcObject = stream;
+                })
+                .catch((err) => {
+                    console.error("Error accessing the camera: ", err);
+                });
+
+            // Capture image from camera when submitting the form
+            function RegisterNewUser() {
+
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imageData = canvas.toDataURL('image/jpeg');
+                imageInput.value = imageData;
+
+                const username = usernameInput.value;
+                const check_in = check_inInput.value;
+                const check_out = check_outInput.value;
+
+                fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `username=${encodeURIComponent(username)}&image=${encodeURIComponent(imageData)}&check_in=${encodeURIComponent(check_in)}&check_out=${encodeURIComponent(check_out)}`
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.is_available) {
+                            window.location.replace("/login"); // Redirect to index page upon match
+                        } else {
+                            resultDiv.textContent = 'There is already a username like this!';
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    });
+            }
+        </script>
+</body>
+
+</html>

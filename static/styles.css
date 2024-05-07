@@ -1,0 +1,139 @@
+/* styles.css */
+
+body {
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: -.016em;
+    line-height: 1.4285914286;
+    -webkit-font-smoothing: antialiased;
+    font-synthesis: none;
+    background: #fff;
+    color: #1d1d1f;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.coll {
+    width: 500px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.fll {
+    display: flex;
+    gap: 5px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+h1 {
+    color: #333;
+}
+
+video {
+    height: 370px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+input {
+    width: 100%;
+    height: 30px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    border: 1px solid #d2d2d7;
+    background: #fbfbfd;
+    padding: 4px 7px;
+}
+
+button {
+    font-size: 14px;
+    line-height: 1.17648;
+    font-weight: 400;
+    letter-spacing: -0.022em;
+    border-style: solid;
+    width: 100%;
+    padding: 10px 30px;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    white-space: nowrap;
+    background: #0071e3;
+    color: #fff;
+    border: 1px solid transparent;
+    border-radius: 8px;
+}
+
+button:hover {
+    background: #0175e9;
+}
+
+.lbld {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.lbltxt {
+    font-size: 14px;
+    padding-left: 7px;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+#result {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    font-weight: 600;
+    background: #ededed;
+    padding: 5px;
+    border-radius: 20px;
+}
+
+.h-tt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: 25px;
+}
+
+.h-txt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#inpTxt {
+    color: red;
+    font-size: 11px;
+    margin-left: 7px;
+}
+
+#camera {
+    position: relative;
+}
+
+.camtxt {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: red;
+    font-weight: 600;
+    text-transform: uppercase;
+    background: black;
+}
