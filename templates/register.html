@@ -16,11 +16,13 @@
 
     <div class="coll">
         <h3>Creating new account</h3>
-        <a href="/login">Log in, if you already have an account</a>
 
         <div id="camera">
-            <div class="camtxt">Please look straight to the camera</div>
+            <div class="camtxt">Please look at the camera</div>
             <video id="video" autoplay></video>
+            <div class="rescol">
+                <div id="result"></div>
+            </div>
         </div>
         <div class="form">
             <input type="hidden" name="image" id="image">
@@ -43,10 +45,12 @@
                 </div>
             </div>
             <button type="submit" onclick="RegisterNewUser()">Register</button>
+            <a class="lnk" href="/login">If you already have an account, log in</a>
         </div>
 
         <script>
-            const resultDiv = document.getElementById("inpTxt")
+            const resultDiv = document.getElementById("result")
+            const inpTxt = document.getElementById("inpTxt")
             const loadingOverlay = document.getElementById("loadingOverlay");
             const video = document.getElementById('video');
             const imageInput = document.getElementById('image');
@@ -75,27 +79,44 @@
                 const imageData = canvas.toDataURL('image/jpeg');
                 imageInput.value = imageData;
 
+                inpTxt.textContent = '';
+
+                resultDiv.style = "background: none;";
+                resultDiv.textContent = '';
+
                 const username = usernameInput.value;
                 const check_in = check_inInput.value;
                 const check_out = check_outInput.value;
 
                 const usnmInp = document.getElementById("username")
+                const checkin = document.getElementById("check_in")
+                const checkout = document.getElementById("check_out")
+
+                usnmInp.parentNode.querySelector('.inpinf').textContent = '';
+                checkin.parentNode.querySelector('.inpinf').textContent = '';
+                checkout.parentNode.querySelector('.inpinf').textContent = '';
+
+
                 if (usnmInp.value.trim() === '') {
                     usnmInp.parentNode.querySelector('.inpinf').textContent = 'Username is required.';
                     hideLoadingOverlay();
                     return;
                 }
 
-                const checkin = document.getElementById("check_in")
                 if (checkin.value.trim() === '') {
                     checkin.parentNode.querySelector('.inpinf').textContent = 'Check in is required.';
                     hideLoadingOverlay();
                     return;
                 }
 
-                const checkout = document.getElementById("check_out")
                 if (checkout.value.trim() === '') {
                     checkout.parentNode.querySelector('.inpinf').textContent = 'Checkout is required.';
+                    hideLoadingOverlay();
+                    return;
+                }
+
+                if (checkout == checkin) {
+                    checkout.parentNode.querySelector('.inpinf').textContent = 'Checkout should be after Check in date.';
                     hideLoadingOverlay();
                     return;
                 }
@@ -109,10 +130,15 @@
                 })
                     .then(response => response.json())
                     .then(data => {
+                        if (data.no_face) {
+                            resultDiv.style = "background: rgba(0, 0, 0, 0.5);";
+                            resultDiv.textContent = 'No face was provided!';
+                            return;
+                        }
                         if (data.is_available) {
                             window.location.replace("/login"); // Redirect to index page upon match
                         } else {
-                            resultDiv.textContent = 'There is already a username like this!';
+                            inpTxt.textContent = 'There is already a username like this!';
                         }
                     })
                     .catch(err => {

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
-    <title>Face Recognition</title>
+    <title>FaceID Login</title>
 </head>
 
 <body>
@@ -17,12 +17,13 @@
     <div class="coll">
         <h3>Login with FaceID</h3>
 
-        <a href="/register">Create an account, if you don't have one</a>
 
         <div id="camera">
-            <div class="camtxt">Please look straight to the camera</div>
+            <div class="camtxt">Please look at the camera</div>
             <video id="video" autoplay></video>
-            <div id="result"></div>
+            <div class="rescol">
+                <div id="result"></div>
+            </div>
         </div>
 
         <div class="lbld">
@@ -31,6 +32,7 @@
             <div class="inpinf"></div>
         </div>
         <button onclick="verifyFace()">Log in</button>
+        <a class="lnk" href="/register">Or create new account, if you don't have one</a>
     </div>
 
     <script>
@@ -60,7 +62,12 @@
             const image = canvas.toDataURL('image/jpeg');
             const username = usernameInput.value;
 
+            // clear previous content in the inputs
+            resultDiv.style = "background: none;";
+            resultDiv.textContent = '';
+
             const usnmInp = document.getElementById("username")
+            usnmInp.parentNode.querySelector('.inpinf').textContent = ''
             if (usnmInp.value.trim() === '') {
                 usnmInp.parentNode.querySelector('.inpinf').textContent = 'Username is required.';
                 hideLoadingOverlay();
@@ -77,14 +84,18 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.user_not_found) {
-                        resultDiv.style = "background: rgba(0, 0, 0, 0.5);";
-                        resultDiv.textContent = 'User does not exist!';
+                        usnmInp.parentNode.querySelector('.inpinf').textContent = 'User does not exist!';
                         hideLoadingOverlay();
                         return;
                     }
 
+                    if (data.no_face) {
+                        resultDiv.style = "background: rgba(0, 0, 0, 0.5);";
+                        resultDiv.textContent = 'No face was provided!';
+                        return;
+                    }
+
                     if (data.is_match) {
-                        resultDiv.textContent = 'Match!';
                         window.location.replace("/"); // Redirect to index page upon match
                     } else {
                         resultDiv.style = "background: rgba(0, 0, 0, 0.5);";

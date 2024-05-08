@@ -11,9 +11,13 @@
 <body>
 
     <div class="coll">
-        <div class="h-tt">Welcome Home! {% if gender == "Man" %} Mr. {% endif %} {% if gender == "Woman" %} Mrs. {% endif %}<span class="usnm">
-            {{username}}
-        </span>
+        <div class="usrimg">
+            <img class="usrimg" src="{{ image }}" alt="User Image">
+        </div>
+        <div class="h-tt">Welcome Home! {% if gender == "Man" %} Mr. {% endif %} {% if gender == "Woman" %} Mrs. {%
+            endif %}<span class="usnm">
+                {{username}}
+            </span>
         </div>
         <div class="h-txt">Here is your booking information</div>
         <div class="h-txt">your check in: {{check_in.strftime("%Y-%m-%d")}}</div>

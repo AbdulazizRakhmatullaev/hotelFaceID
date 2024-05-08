@@ -1,6 +1,7 @@
 /* styles.css */
 
-html, body {
+html,
+body {
     height: 100%;
 }
 
@@ -99,14 +100,21 @@ button:hover {
     font-weight: 500;
 }
 
-#result {
+.rescol {
     position: absolute;
     bottom: 10px;
-    right: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#result {
+    width: auto;
     color: #fff;
     font-weight: 600;
     font-size: 11px;
     padding: 1px 8px;
+    box-sizing: border-box;
     border-radius: 5px;
 }
 
@@ -188,4 +196,32 @@ button:hover {
     left: 0;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1000;
+}
+
+.lnk {
+    color: #000;
+    font-size: 14px;
+    text-align: right;
+    text-decoration: none;
+}
+
+.lnk:hover {
+    text-decoration: underline;
+}
+
+h3 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.usrimg {
+    display: flex;
+    justify-content: center;
+}
+
+.usrimg img {
+    width: 200px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 18px;
 }
