@@ -23,7 +23,7 @@
         <h3>Login with FaceID</h3>
 
         <div id="camera">
-            <div class="camtxt">Please look at the camera</div>
+            <div class="camtxt">Please look straight to the camera</div>
             <video id="video" autoplay></video>
             <div class="rescol">
                 <div id="result"></div>
@@ -95,7 +95,7 @@
 
                     if (data.no_face) {
                         resultDiv.style = "background: rgba(0, 0, 0, 0.5);";
-                        resultDiv.textContent = 'No face was provided!';
+                        resultDiv.textContent = 'No face was captured!';
                         return;
                     }
 
