@@ -120,8 +120,20 @@
                     return;
                 }
 
-                if (checkout == checkin) {
+                const checkInDate = new Date(checkin.value);
+                const checkOutDate = new Date(checkout.value);
+
+                // Check if check-out date is after check-in date
+                if (checkOutDate <= checkInDate) {
                     checkout.parentNode.querySelector('.inpinf').textContent = 'Checkout should be after Check in date.';
+                    hideLoadingOverlay();
+                    return;
+                }
+
+                // Check if there's at least one day gap between check-in and check-out
+                const oneDay = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+                if ((checkOutDate.getTime() - checkInDate.getTime()) < oneDay) {
+                    checkout.parentNode.querySelector('.inpinf').textContent = 'There should be at least one day gap between check-in and check-out.';
                     hideLoadingOverlay();
                     return;
                 }
@@ -158,6 +170,20 @@
                 // Hide loading overlay
                 loadingOverlay.style.display = "none";
             }
+        </script>
+        <script>
+            // Get today's date
+            var today = new Date();
+
+            // Format the date as YYYY-MM-DD
+            var formattedDate = today.toISOString().substr(0, 10);
+
+            // Set the value of the input field to today's date
+            document.getElementById("check_in").value = formattedDate;
+            document.getElementById("check_in").min = formattedDate;
+
+            document.getElementById("check_out").value = formattedDate;
+            document.getElementById("check_out").min = formattedDate;
         </script>
 </body>
 
