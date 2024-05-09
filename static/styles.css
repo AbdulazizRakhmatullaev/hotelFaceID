@@ -229,3 +229,16 @@ h3 {
     object-fit: cover;
     border-radius: 18px;
 }
+
+.icon {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon img {
+    height: 45px;
+    width: 100px;
+    object-fit: cover;
+}

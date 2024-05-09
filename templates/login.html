@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
-    <title>FaceID Login</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='tot.png') }}">
+
+    <title>Login</title>
 </head>
 
 <body>
@@ -15,8 +17,10 @@
     </div>
 
     <div class="coll">
+        <div class="icon">
+            <img src="{{ url_for('static', filename='tot.png') }}" alt="">
+        </div>
         <h3>Login with FaceID</h3>
-
 
         <div id="camera">
             <div class="camtxt">Please look at the camera</div>
