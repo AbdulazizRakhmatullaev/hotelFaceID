@@ -19,31 +19,38 @@
     <div class="coll">
         <div class="icon">
             <img src="{{ url_for('static', filename='tot.png') }}" alt="">
+            <div class="wt">Truely Open & Trusted</div>
         </div>
         <h3>Login with FaceID</h3>
 
-        <div id="camera">
-            <div class="camtxt">Please look straight to the camera</div>
-            <video id="video" autoplay></video>
-            <div class="rescol">
-                <div id="result"></div>
-            </div>
-        </div>
+        <div class="fll">
 
-        <div class="lbld">
-            <div class="lbltxt">Username</div>
-            <input required type="text" id="username" placeholder="Enter your username">
-            <div class="inpinf"></div>
+            <div id="camera">
+                <div class="camtxt">Please look straight to the camera</div>
+                <video id="video" autoplay></video>
+                <div class="rescol">
+                    <div id="result"></div>
+                </div>
+            </div>
+
+            <div class="form">
+                <div class="lbld">
+                    <div class="lbltxt">Username</div>
+                    <input required type="text" id="username" placeholder="Enter your username">
+                    <div class="inpinf"></div>
+                </div>
+                <button onclick="verifyFace()" class="btn">Log in</button>
+                <a class="lnk" href="/register">If you don't have an account,  <span style="color: #007fe4; font-weight: 600;">Sign up</span></a>
+            </div>
+
         </div>
-        <button onclick="verifyFace()">Log in</button>
-        <a class="lnk" href="/register">If you don't have an account, Sign up</a>
     </div>
 
     <script>
         const loadingOverlay = document.getElementById("loadingOverlay");
         const video = document.getElementById('video');
         const resultDiv = document.getElementById('result');
-        const usernameInput = document.getElementById('username');
+        const usernameInp = document.getElementById('username');
 
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(stream => {
@@ -63,17 +70,17 @@
             canvas.height = video.videoHeight;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
             const image = canvas.toDataURL('image/jpeg');
-            const username = usernameInput.value;
+            const username = usernameInp.value;
 
             // clear previous content in the inputs
             resultDiv.style = "background: none;";
             resultDiv.textContent = '';
 
-            const usnmInp = document.getElementById("username")
-            usnmInp.parentNode.querySelector('.inpinf').textContent = ''
-            if (usnmInp.value.trim() === '') {
-                usnmInp.parentNode.querySelector('.inpinf').textContent = 'Username is required.';
+            usernameInp.parentNode.querySelector('.inpinf').textContent = ''
+            if (usernameInp.value.trim() === '') {
+                usernameInp.parentNode.querySelector('.inpinf').textContent = 'Username is required.';
                 hideLoadingOverlay();
                 return;
             }
@@ -88,7 +95,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.user_not_found) {
-                        usnmInp.parentNode.querySelector('.inpinf').textContent = 'User does not exist!';
+                        usernameInp.parentNode.querySelector('.inpinf').textContent = 'User does not exist!';
                         hideLoadingOverlay();
                         return;
                     }

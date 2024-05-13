@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Admin</title>
+</head>
+
+<body>
+
+    <div class="coll">
+        <div class="h-tt">
+            Welcome to the Admin Panel‎‎ ‎ ‎
+            <form action="/logout" method="post">
+                <button type="submit" class="roundbtn">Logout</button>
+            </form>
+        </div>
+        <table>
+          <tbody>
+            <tr>
+                <th>Photo</th>
+                <th>Username</th>
+                <th>Date of birth</th>
+                <th>Passport number</th>
+                <th>Room number</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Actions</th>
+            </tr>
+            {% for user in users %}
+            <tr>
+                <td>
+                    <img class="adimg" src="{{ user.image }}" alt="User Image">
+                </td>
+                <td>@{{user.username}}</td>
+                <td>{{user.dob.strftime("%Y-%m-%d")}}</td>
+                <td>{{user.passport}}</td>
+                <td>{{user.room_num}}</td>
+                <td>{{user.check_in.strftime("%Y-%m-%d, %H:%m")}}</td>
+                <td>{{user.check_out.strftime("%Y-%m-%d, %H:%m")}}</td>
+                <td>
+                    <form action="/admin/account/delete" method="post">
+                        <input type="hidden" value="{{user.username}}">
+                        <button type="submit" class="roredbtn">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+
+
+</body>
+
+</html>

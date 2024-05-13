@@ -19,38 +19,83 @@
     <div class="coll">
         <div class="icon">
             <img src="{{ url_for('static', filename='tot.png') }}" alt="">
+            <div class="wt">Truely Open & Trusted</div>
         </div>
         <h3>Creating new account</h3>
 
-        <div id="camera">
-            <div class="camtxt">Please straight look to the camera</div>
-            <video id="video" autoplay></video>
-            <div class="rescol">
-                <div id="result"></div>
-            </div>
-        </div>
-        <div class="form">
-            <input type="hidden" name="image" id="image">
-            <div class="lbld">
-                <div class="lbltxt">Username</div>
-                <input required type="text" name="username" id="username" placeholder="Username">
-                <div id="inpTxt"></div>
-                <div class="inpinf"></div>
-            </div>
-            <div class="fll">
-                <div class="lbld">
-                    <div class="lbltxt">Check in</div>
-                    <input required type="date" name="check_in" id="check_in">
-                    <div class="inpinf"></div>
-                </div>
-                <div class="lbld">
-                    <div class="lbltxt">Checkout</div>
-                    <input required type="date" name="check_out" id="check_out">
-                    <div class="inpinf"></div>
+        <div class="fll">
+            <div id="camera">
+                <div class="camtxt">Please look straight to the camera</div>
+                <video id="video" autoplay></video>
+                <div class="rescol">
+                    <div id="result"></div>
                 </div>
             </div>
-            <button type="submit" onclick="RegisterNewUser()">Sign up</button>
-            <a class="lnk" href="/login">If you already have an account, log in</a>
+            <div class="form">
+                <input type="hidden" name="image" id="image">
+                <div class="lbld">
+                    <div class="lbltxt">Username</div>
+                    <input required type="text" name="username" id="username" placeholder="Username">
+                    <div id="inpTxt"></div>
+                    <div class="inpinf"></div>
+                </div>
+                <div class="fll">
+                    <div class="lbld">
+                        <div class="lbltxt">First name</div>
+                        <input required type="text" name="first_name" id="first_name" placeholder="First name">
+                        <div id="inpTxt"></div>
+                        <div class="inpinf"></div>
+                    </div>
+                    <div class="lbld">
+                        <div class="lbltxt">Last name</div>
+                        <input required type="text" name="last_name" id="last_name" placeholder="Last name">
+                        <div id="inpTxt"></div>
+                        <div class="inpinf"></div>
+                    </div>
+                </div>
+                <div class="fll">
+                    <div class="lbld">
+                        <div class="lbltxt">Passport number</div>
+                        <input required type="text" name="passport" id="passport" placeholder="Passport number">
+                        <div id="inpTxt"></div>
+                        <div class="inpinf"></div>
+                    </div>
+                    <div class="lbld">
+                        <div class="lbltxt">Date of birth</div>
+                        <input required type="date" name="dob" id="dob" placeholder="Date of birth">
+                        <div id="inpTxt"></div>
+                        <div class="inpinf"></div>
+                    </div>
+                </div>
+                <div class="fll">
+                    <div class="lbld">
+                        <div class="lbltxt">Hotel name</div>
+                        <input required type="text" name="hotel_name" id="hotel_name" placeholder="Hotel name">
+                        <div id="inpTxt"></div>
+                        <div class="inpinf"></div>
+                    </div>
+                    <div class="lbld">
+                        <div class="lbltxt">Room number</div>
+                        <input required type="number" name="room_num" id="room_num" placeholder="Room number">
+                        <div id="inpTxt"></div>
+                        <div class="inpinf"></div>
+                    </div>
+                </div>
+                <div class="fll">
+                    <div class="lbld">
+                        <div class="lbltxt">Check-in</div>
+                        <input required type="datetime-local" name="check_in" id="check_in">
+                        <div class="inpinf"></div>
+                    </div>
+                    <div class="lbld">
+                        <div class="lbltxt">Check-out</div>
+                        <input required type="datetime-local" name="check_out" id="check_out">
+                        <div class="inpinf"></div>
+                    </div>
+                </div>
+                <button class="btn" type="submit" onclick="RegisterNewUser()">Register new account</button>
+                <a class="lnk" href="/login">If you already have an account, <span style="color: #007fe4; font-weight: 600;">log in</span></a>
+            </div>
         </div>
 
         <script>
@@ -59,9 +104,18 @@
             const loadingOverlay = document.getElementById("loadingOverlay");
             const video = document.getElementById('video');
             const imageInput = document.getElementById('image');
-            const usernameInput = document.getElementById('username');
-            const check_inInput = document.getElementById('check_in');
-            const check_outInput = document.getElementById('check_out');
+
+            const usernameInp = document.getElementById('username');
+            const first_nameInp = document.getElementById('first_name');
+            const last_nameInp = document.getElementById('last_name');
+            const dobInp = document.getElementById('dob');
+
+            const passportInp = document.getElementById('passport');
+            const hotel_nameInp = document.getElementById('hotel_name');
+            const room_numInp = document.getElementById('room_num');
+
+            const check_inInp = document.getElementById('check_in');
+            const check_outInp = document.getElementById('check_out');
 
             // Access the device camera and stream to video element
             navigator.mediaDevices.getUserMedia({ video: true })
@@ -89,43 +143,105 @@
                 resultDiv.style = "background: none;";
                 resultDiv.textContent = '';
 
-                const username = usernameInput.value;
-                const check_in = check_inInput.value;
-                const check_out = check_outInput.value;
+                usernameInp.parentNode.querySelector('.inpinf').textContent = '';
+                dobInp.parentNode.querySelector('.inpinf').textContent = '';
+                first_nameInp.parentNode.querySelector('.inpinf').textContent = '';
+                last_nameInp.parentNode.querySelector('.inpinf').textContent = '';
+                passportInp.parentNode.querySelector('.inpinf').textContent = '';
+                hotel_nameInp.parentNode.querySelector('.inpinf').textContent = '';
+                room_numInp.parentNode.querySelector('.inpinf').textContent = '';
+                check_inInp.parentNode.querySelector('.inpinf').textContent = '';
+                check_outInp.parentNode.querySelector('.inpinf').textContent = '';
 
-                const usnmInp = document.getElementById("username")
-                const checkin = document.getElementById("check_in")
-                const checkout = document.getElementById("check_out")
+                const username = usernameInp.value;
+                const dob = dobInp.value;
+                const first_name = first_nameInp.value;
+                const last_name = last_nameInp.value;
+                const passport = passportInp.value;
+                const hotel_name = hotel_nameInp.value;
+                const room_num = room_numInp.value;
+                const check_in = check_inInp.value;
+                const check_out = check_outInp.value;
 
-                usnmInp.parentNode.querySelector('.inpinf').textContent = '';
-                checkin.parentNode.querySelector('.inpinf').textContent = '';
-                checkout.parentNode.querySelector('.inpinf').textContent = '';
 
-
-                if (usnmInp.value.trim() === '') {
-                    usnmInp.parentNode.querySelector('.inpinf').textContent = 'Username is required.';
+                if (username.trim() === '') {
+                    usernameInp.parentNode.querySelector('.inpinf').textContent = 'Username is required.';
                     hideLoadingOverlay();
                     return;
                 }
 
-                if (checkin.value.trim() === '') {
-                    checkin.parentNode.querySelector('.inpinf').textContent = 'Check in is required.';
+                if (first_name.trim() === '') {
+                    first_nameInp.parentNode.querySelector('.inpinf').textContent = 'First name is required.';
+                    hideLoadingOverlay();
+                    return;
+                }
+                if (first_name.length > 20) {
+                    first_nameInp.parentNode.querySelector('.inpinf').textContent = 'First name should be at least 20 characters.';
                     hideLoadingOverlay();
                     return;
                 }
 
-                if (checkout.value.trim() === '') {
-                    checkout.parentNode.querySelector('.inpinf').textContent = 'Checkout is required.';
+                if (last_name.trim() === '') {
+                    last_nameInp.parentNode.querySelector('.inpinf').textContent = 'Last name is required.';
+                    hideLoadingOverlay();
+                    return;
+                }
+                if (last_name.length > 25) {
+                    last_nameInp.parentNode.querySelector('.inpinf').textContent = 'Last name should be at least 20 characters.';
                     hideLoadingOverlay();
                     return;
                 }
 
-                const checkInDate = new Date(checkin.value);
-                const checkOutDate = new Date(checkout.value);
+                if (passport.trim() === '') {
+                    passportInp.parentNode.querySelector('.inpinf').textContent = 'Passport is required.';
+                    hideLoadingOverlay();
+                    return;
+                }
+
+                const passportPattern = /^[A-Za-z]{2}\d{7}$/;
+                // Check if passport ID matches the pattern
+                if (!passportPattern.test(passport)) {
+                    passportInp.parentNode.querySelector('.inpinf').textContent = 'Passport ID should look like AA0000000.';
+                    hideLoadingOverlay();
+                    return;
+                }
+
+                if (dob.trim() === '') {
+                    dobInp.parentNode.querySelector('.inpinf').textContent = 'Date of birth is required.';
+                    hideLoadingOverlay();
+                    return;
+                }
+
+                if (hotel_name.trim() === '') {
+                    hotel_nameInp.parentNode.querySelector('.inpinf').textContent = 'Hotel name is required.';
+                    hideLoadingOverlay();
+                    return;
+                }
+
+                if (room_num.trim() === '') {
+                    room_numInp.parentNode.querySelector('.inpinf').textContent = 'Room number is required.';
+                    hideLoadingOverlay();
+                    return;
+                }
+
+                if (check_in.trim() === '') {
+                    check_inInp.parentNode.querySelector('.inpinf').textContent = 'Check-in is required.';
+                    hideLoadingOverlay();
+                    return;
+                }
+
+                if (check_out.trim() === '') {
+                    check_outInp.parentNode.querySelector('.inpinf').textContent = 'Check-out is required.';
+                    hideLoadingOverlay();
+                    return;
+                }
+
+                const checkInDate = new Date(check_in);
+                const checkOutDate = new Date(check_out);
 
                 // Check if check-out date is after check-in date
                 if (checkOutDate <= checkInDate) {
-                    checkout.parentNode.querySelector('.inpinf').textContent = 'Checkout should be after Check-in date.';
+                    check_outInp.parentNode.querySelector('.inpinf').textContent = 'Checkout should be after Check-in date.';
                     hideLoadingOverlay();
                     return;
                 }
@@ -133,7 +249,7 @@
                 // Check if there's at least one day gap between check-in and check-out
                 const oneDay = 24 * 60 * 60 * 1000; // 1 day in milliseconds
                 if ((checkOutDate.getTime() - checkInDate.getTime()) < oneDay) {
-                    checkout.parentNode.querySelector('.inpinf').textContent = 'There should be at least one day gap between check-in and check-out.';
+                    check_outInp.parentNode.querySelector('.inpinf').textContent = 'There should be at least one day gap between check-in and check-out.';
                     hideLoadingOverlay();
                     return;
                 }
@@ -143,20 +259,23 @@
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: `username=${encodeURIComponent(username)}&image=${encodeURIComponent(imageData)}&check_in=${encodeURIComponent(check_in)}&check_out=${encodeURIComponent(check_out)}`
+                    body: `username=${encodeURIComponent(username)}&dob=${encodeURIComponent(dob)}&first_name=${encodeURIComponent(first_name)}&last_name=${encodeURIComponent(last_name)}&passport=${encodeURIComponent(passport)}&hotel_name=${encodeURIComponent(hotel_name)}&room_num=${encodeURIComponent(room_num)}&image=${encodeURIComponent(imageData)}&check_in=${encodeURIComponent(check_in)}&check_out=${encodeURIComponent(check_out)}`
                 })
                     .then(response => response.json())
                     .then(data => {
-                        if (data.no_face) {
-                            resultDiv.style = "background: rgba(0, 0, 0, 0.5);";
-                            resultDiv.textContent = 'No face was captured!';
-                            return;
-                        }
-                        if (data.is_available) {
-                            window.location.replace("/login"); // Redirect to index page upon match
-                        } else {
-                            inpTxt.textContent = 'There is already a username like this!';
-                        }
+                      if (data.no_face) {
+                          resultDiv.style = "background: rgba(0, 0, 0, 0.5);";
+                          resultDiv.textContent = 'No face was captured!';
+                          return;
+                      }
+                      if (data.user_is_available) {
+                        window.location.replace("/login"); // Redirect to index page upon match
+                      }
+                      else {
+                        usernameInp.parentNode.querySelector('.inpinf').textContent = 'There is already a username like this!';
+                      }
+
+
                     })
                     .catch(err => {
                         console.error(err);
@@ -176,7 +295,7 @@
             var today = new Date();
 
             // Format the date as YYYY-MM-DD
-            var formattedDate = today.toISOString().substr(0, 10);
+            var formattedDate = today.toISOString().substr(0, 16);
 
             // Set the value of the input field to today's date
             document.getElementById("check_in").value = formattedDate;

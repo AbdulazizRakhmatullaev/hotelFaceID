@@ -11,21 +11,57 @@
 <body>
 
     <div class="coll">
-        <div class="usrimg">
-            <img class="usrimg" src="{{ image }}" alt="User Image">
+        <div class="h-tt">Welcome Home! {{first_name}} {{last_name}}
         </div>
-        <div class="h-tt">Welcome Home! {% if gender == "Man" %} Mr. {% endif %} {% if gender == "Woman" %} Mrs. {%
-            endif %}<span class="usnm">
-                {{username}}
-            </span>
-        </div>
-        <div class="h-txt">Here is your booking information</div>
-        <div class="h-txt">your check in: {{check_in.strftime("%Y-%m-%d")}}</div>
-        <div class="h-txt">your checkout: {{check_out.strftime("%Y-%m-%d")}}</div>
+        <table>
+          <caption>
+              Here is your booking information for the {{hotel_name}}
+          </caption>
+          <tbody>
+            <tr>
+            <th scope="row">Photo</th>
+            <td>
+                <div class="usrimg">
+                    <img class="usrimg" src="{{ image }}" alt="User Image">
+                </div>
+            </td>
+            </tr>
+            <tr>
+              <th scope="row">Username</th>
+              <td>@{{username}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Date of birth</th>
+              <td>{{dob.strftime("%Y-%m-%d")}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Passport number</th>
+              <td>{{passport}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Room number</th>
+              <td>{{room_num}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Check-in</th>
+              <td>{{check_in.strftime("%Y-%m-%d, %H:%m")}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Check-out</th>
+              <td>{{check_out.strftime("%Y-%m-%d, %H:%m")}}</td>
+            </tr>
+          </tbody>
+        </table>
 
-        <form action="/logout" method="post">
-            <button type="submit">Logout</button>
-        </form>
+        <div class="flend">
+            <form action="/myaccount/delete" method="post">
+                <input type="hidden" name="username" value="{{ username }}">
+                <button type="submit" class="roredbtn">Delete this account</button>
+            </form>
+            <form action="/logout" method="post">
+                <button type="submit" class="roundbtn">Logout</button>
+            </form>
+        </div>
     </div>
 
 
